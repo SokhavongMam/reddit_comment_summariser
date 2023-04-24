@@ -1,0 +1,13 @@
+{
+    "name": "Reddit Content Summariser",
+    "version": "1.0",
+    "manifest_version": 3,
+    "description": "# The purpose of this code is to retrieve comments of a Reddit post, extract the text of the parent comments, and display.",
+    "permissions": [],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_title": "Reddit Content Summariser"
+    }
+}
