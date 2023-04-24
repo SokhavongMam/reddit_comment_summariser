@@ -8,10 +8,12 @@ from flask import Flask, jsonify
 
 load_dotenv()
 app = Flask(__name__)
+@app.route('/run_scraper/<path:url>')
 
 
 def main(URL):
     LINK = URL
+    print(LINK)
     SUBREDDIT = re.search("r/(\w+?)/", LINK).group(1)
     ID36 = re.search("comments/(\w+?)/", LINK).group(1)
 
@@ -81,33 +83,30 @@ def main(URL):
             continue
         comment_list.append(comment["data"]["body"])
 
-    # Write the comment text into a txt file.
-    with open("comments.txt", "w", encoding="utf-8") as file:
-        file.write(f"Subreddit Title: {subreddit_title}\n\n")
-        file.write(f"Post Title: {post_title}\n\n")
-        file.write(f"Comments Below:\n\n")
-        for item in comment_list:
-            file.write(f"{str(item)}\n")
-            file.write(f"----------\n")
+    # # Write the comment text into a txt file.
+    # with open("comments.txt", "w", encoding="utf-8") as file:
+    #     file.write(f"Subreddit Title: {subreddit_title}\n\n")
+    #     file.write(f"Post Title: {post_title}\n\n")
+    #     file.write(f"Comments Below:\n\n")
+    #     for item in comment_list:
+    #         file.write(f"{str(item)}\n")
+    #         file.write(f"----------\n")
 
-    # comments_dict = {
-    #     "Subreddit Title": subreddit_title,
-    #     "Post Title": post_title,
-    #     "Comments": comment_list,
-    # }
+    comments_dict = {
+        "Subreddit Title": subreddit_title,
+        "Post Title": post_title,
+        "Comments": comment_list,
+    }
 
     return comments_dict
 
 
-def run(URL):
+def run_scraper(URL):
     # Call your Python module here and get the result
     result = main(URL)
     # Return the result as a JSON object
-    return result
+    return jsonify({'result': result})
 
 
-print(
-    run(
-        "https://www.reddit.com/r/soccer/comments/12t6oqg/giovanni_albanese_the_sentence_on_the_fifteen/"
-    )
-)
+if __name__ == "__main__":
+    app.run()
